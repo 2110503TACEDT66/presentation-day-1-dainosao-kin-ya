@@ -8,14 +8,14 @@ const {
 } = require("../controllers/hotels");
 
 //Include other resource routers
-const appointmentRouter = require("./reservations");
+const reservationRouter = require("./reservations");
 
 const router = express.Router();
 
 const { protect, authorize } = require("../middleware/auth");
 
 //re-route into other resource routers
-router.use("/:hotelId/appointments/", appointmentRouter);
+router.use("/:hotelId/reservations/", reservationRouter);
 
 router
   .route("/")
