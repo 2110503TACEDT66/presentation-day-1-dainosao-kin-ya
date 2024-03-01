@@ -8,7 +8,7 @@ const {
 } = require("../controllers/hospitals");
 
 //Include other resource routers
-const appointmentRouter = require("./appointments");
+const appointmentRouter = require("./reservations");
 
 const router = express.Router();
 
