@@ -1,5 +1,5 @@
 const { query } = require("express");
-const Hospital = require("../models/Hopital.js");
+const Hospital = require("../models/Hotel.js");
 
 // @desc    Get all hospitals
 // @route   Get /api/v1/hospitals
