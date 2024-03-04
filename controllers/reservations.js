@@ -87,14 +87,28 @@ exports.addReservation = async (req, res, next) => {
     //Add user Id to req.body
     req.body.user = req.user.id;
 
+    //Check nightNum more than 3
+    if((req.body.nightNum || 1) > 3){
+      return res.status(400).json({
+        success: false,
+        message: `You cannot reserve more than 3 nights`,
+      });
+    }
+
     //Check for existed reservation
     const existedReservations = await Reservation.find({ user: req.user.id });
 
+    let totalNight = 0;
+    for(let reserve of existedReservations){
+      totalNight += reserve.nightNum;
+    }
+    console.log(totalNight);
+
     //If the user is not an admin, they can only create 3 reservation
-    if (existedReservations.length >= 3 && req.user.role !== "admin") {
+    if (totalNight + (req.body.nightNum || 1) > 3 &&req.user.role !== "admin") {
       return res.status(400).json({
         success: false,
-        message: `The user with ID ${req.user.id} has already made 3 reservation`,
+        message: `The user with ID ${req.user.id} has already made up to 3 nights reservation`,
       });
     }
 
@@ -132,6 +146,32 @@ exports.updateReservation = async (req, res, next) => {
         success: false,
         message: `User ${req.user.id} is not authorized to update this reservation`,
       });
+    }
+
+    //Checking nightNum
+    if(reservation.nightNum!==req.body.nightNum && req.body.nightNum){
+      //Check nightNum more than 3
+      if((req.body.nightNum || 1) > 3){
+        return res.status(400).json({
+          success: false,
+          message: `You cannot reserve more than 3 nights`,
+        });
+      }
+      const existedReservations = await Reservation.find({ user: req.user.id });
+
+      let totalNight = 0;
+      for(let reserve of existedReservations){
+        totalNight += reserve.nightNum;
+      }
+      totalNight -= reservation.nightNum;
+      
+      //If the user is not an admin, they can only create 3 reservation
+      if (totalNight + req.body.nightNum > 3 &&req.user.role !== "admin") {
+        return res.status(400).json({
+          success: false,
+          message: `The user with ID ${req.user.id} has already made up to 3 nights reservation`,
+        });
+      }
     }
 
     reservation = await Reservation.findByIdAndUpdate(req.params.id, req.body, {
