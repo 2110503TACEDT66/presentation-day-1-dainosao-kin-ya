@@ -28,11 +28,16 @@ const HotelSchema = new mongoose.Schema(
     },
     tel: {
       type: String,
+      match: [/^\(?([0-9]{3})\)?[-]([0-9]{3})[-]([0-9]{4})$/, "Please add a telephone number in xxx-xxx-xxxx form."]
     },
     region: {
       type: String,
       require: [true, "Please add a region"],
     },
+    picture: {
+      type: String,
+      require: [true, "Please add image URI"],
+    }
   },
   {
     toJSON: { virtuals: true },
