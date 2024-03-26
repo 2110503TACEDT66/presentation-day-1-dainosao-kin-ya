@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+},
+{
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
 });
 
 //Encrypt password using bcrypt
@@ -57,5 +61,14 @@ UserSchema.methods.getSignedJwtToken = function () {
 UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
+
+
+//reverse populate with virtuals
+UserSchema.virtual("hotel", {
+  ref: "Reservation",
+  localField: "_id",
+  foreignField: "user",
+  justOne: false,
+});
 
 module.exports = mongoose.model("User", UserSchema);
