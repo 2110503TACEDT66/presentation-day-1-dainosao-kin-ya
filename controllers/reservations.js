@@ -16,7 +16,7 @@ exports.getReservations = async (req, res, next) => {
     ).populate(
     {
       path: "hotel",
-      select: "name province tel",
+      select: "name province tel picture",
     });
   } else {
     if (req.params.hotelId) {
@@ -29,7 +29,7 @@ exports.getReservations = async (req, res, next) => {
       ).populate(
         {
           path: "hotel",
-          select: "name province tel",
+          select: "name province tel picture",
         });
     } else {
       query = Reservation.find().populate(
@@ -40,7 +40,7 @@ exports.getReservations = async (req, res, next) => {
       ).populate(
         {
           path: "hotel",
-          select: "name province tel",
+          select: "name province tel picture",
         });
     }
   }
